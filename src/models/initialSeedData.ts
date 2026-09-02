@@ -490,6 +490,17 @@ export const INITIAL_PRODUCTS: Product[] = [
 
 export const DEMO_USERS: User[] = [
   {
+    id: 'usr_admin_hernando',
+    email: 'hermnond010@gmail.com',
+    name: 'Hernando D2 (Admin)',
+    role: 'admin',
+    avatarUrl: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=200&q=80',
+    phone: '+57 300 000 0000',
+    address: 'Sede Principal D2',
+    createdAt: '2026-01-01T00:00:00.000Z',
+    isActive: true,
+  },
+  {
     id: 'usr_admin_d2',
     email: 'admin@d2supermercado.com',
     name: 'Carlos Mendoza (Gerente Admin D2)',

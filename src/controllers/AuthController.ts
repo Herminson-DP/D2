@@ -115,7 +115,7 @@ export class AuthController {
     }
   }
 
-  static async loginWithGoogle(): Promise<{ success: boolean; user?: User; error?: string }> {
+  static async loginWithGoogle(): Promise<{ success: boolean; user?: User; error?: string; isUnauthorizedDomain?: boolean }> {
     try {
       const result = await signInWithPopup(auth, googleProvider);
       const googleUser = result.user;
@@ -144,7 +144,43 @@ export class AuthController {
       UserModel.setCurrentUser(matched);
       return { success: true, user: matched };
     } catch (err: any) {
-      return { success: false, error: err.message || 'Error en autenticación con Google' };
+      console.warn('Google sign-in error:', err);
+      const isUnauthorized = err.code === 'auth/unauthorized-domain' || (err.message && err.message.includes('unauthorized-domain'));
+      return { 
+        success: false, 
+        isUnauthorizedDomain: isUnauthorized,
+        error: isUnauthorized 
+          ? 'El dominio de esta vista previa no está en la lista de dominios autorizados de Firebase Console (Authentication > Configuración > Dominios autorizados).' 
+          : (err.message || 'Error en autenticación con Google') 
+      };
+    }
+  }
+
+  static async loginWithDirectEmail(email: string, name?: string, role: UserRole = 'cliente'): Promise<{ success: boolean; user?: User; error?: string }> {
+    try {
+      const users = await UserModel.getUsers();
+      let matched = users.find(u => u.email.toLowerCase() === email.toLowerCase());
+
+      if (!matched) {
+        matched = {
+          id: `usr_${Date.now()}`,
+          email: email,
+          name: name || email.split('@')[0],
+          role: role,
+          createdAt: new Date().toISOString(),
+          isActive: true,
+        };
+        await UserModel.saveUser(matched);
+      }
+
+      if (!matched.isActive) {
+        return { success: false, error: 'Esta cuenta ha sido desactivada por un administrador.' };
+      }
+
+      UserModel.setCurrentUser(matched);
+      return { success: true, user: matched };
+    } catch (err: any) {
+      return { success: false, error: err.message || 'Error al iniciar sesión' };
     }
   }
 

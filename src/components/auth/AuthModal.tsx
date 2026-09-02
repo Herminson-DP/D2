@@ -45,10 +45,12 @@ export const AuthModal: React.FC<AuthModalProps> = ({
 
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [isUnauthorizedDomain, setIsUnauthorizedDomain] = useState(false);
 
   const handleLoginSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
+    setIsUnauthorizedDomain(false);
     setIsLoading(true);
 
     const res = await AuthController.loginWithEmail(loginEmail, loginPassword);
@@ -64,6 +66,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
   const handleRegisterSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
+    setIsUnauthorizedDomain(false);
     if (!regName.trim() || !regEmail.trim() || !regPassword.trim()) {
       setError('Por favor llena los campos requeridos (*)');
       return;
@@ -82,6 +85,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
 
   const handleGoogleLogin = async () => {
     setError(null);
+    setIsUnauthorizedDomain(false);
     setIsLoading(true);
     const res = await AuthController.loginWithGoogle();
     setIsLoading(false);
@@ -89,13 +93,31 @@ export const AuthModal: React.FC<AuthModalProps> = ({
       onAuthSuccess(res.user);
       onClose();
     } else {
+      if (res.isUnauthorizedDomain) {
+        setIsUnauthorizedDomain(true);
+      }
       setError(res.error || 'Error en inicio con Google');
+    }
+  };
+
+  const handleDirectUserLogin = async (email: string, name?: string, role: UserRole = 'cliente') => {
+    setIsLoading(true);
+    setError(null);
+    setIsUnauthorizedDomain(false);
+    const res = await AuthController.loginWithDirectEmail(email, name, role);
+    setIsLoading(false);
+    if (res.success && res.user) {
+      onAuthSuccess(res.user);
+      onClose();
+    } else {
+      setError(res.error || 'Error al iniciar sesión');
     }
   };
 
   const handleDemoLogin = async (role: UserRole) => {
     setIsLoading(true);
     setError(null);
+    setIsUnauthorizedDomain(false);
     try {
       const demo = await AuthController.loginAsDemo(role);
       onAuthSuccess(demo);
@@ -167,9 +189,35 @@ export const AuthModal: React.FC<AuthModalProps> = ({
         <div className="p-6 space-y-4">
           
           {error && (
-            <div className="p-3 rounded-xl bg-red-950/50 border border-red-800/80 text-red-300 text-xs font-medium flex items-center gap-2">
-              <AlertCircle className="w-4 h-4 flex-shrink-0 text-red-400" />
-              <span>{error}</span>
+            <div className="p-3.5 rounded-2xl bg-red-950/50 border border-red-800/80 text-red-300 text-xs font-medium space-y-2">
+              <div className="flex items-start gap-2">
+                <AlertCircle className="w-4 h-4 flex-shrink-0 text-red-400 mt-0.5" />
+                <span className="leading-snug">{error}</span>
+              </div>
+              
+              {isUnauthorizedDomain && (
+                <div className="pt-2 border-t border-red-900/60 mt-2 space-y-2">
+                  <p className="text-[11px] text-gray-300 leading-normal">
+                    Para habilitar el popup de Google en tu proyecto Firebase, agrega este dominio en <strong className="text-white">Firebase Console &gt; Authentication &gt; Settings &gt; Authorized domains</strong>:
+                  </p>
+                  <code className="block p-1.5 rounded-lg bg-black/40 text-[10px] text-amber-300 font-mono select-all overflow-x-auto">
+                    {window.location.hostname}
+                  </code>
+                  <p className="text-[11px] text-gray-300 font-semibold">
+                    Alternativamente, puedes ingresar de inmediato con tu cuenta:
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    <button
+                      type="button"
+                      onClick={() => handleDirectUserLogin('hermnond010@gmail.com', 'Hernando D2')}
+                      className="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs flex items-center gap-1.5 transition-colors shadow-xs"
+                    >
+                      <Sparkles className="w-3.5 h-3.5" />
+                      <span>Ingresar como hermnond010@gmail.com</span>
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
           )}
 
