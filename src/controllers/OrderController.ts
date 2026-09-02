@@ -1,6 +1,7 @@
 import { OrderReceipt, OrderItem, CartCalculation, User } from '../types';
 import { OrderModel } from '../models/OrderModel';
 import { ProductModel } from '../models/ProductModel';
+import { CategoryModel } from '../models/CategoryModel';
 
 export class OrderController {
   static async checkout(
@@ -18,6 +19,9 @@ export class OrderController {
 
       // Check stock availability
       const allProducts = await ProductModel.getProducts();
+      const allCategories = await CategoryModel.getCategories();
+      const catMap = new Map(allCategories.map(c => [c.id, c.name]));
+
       for (const item of cartCalc.items) {
         const prod = allProducts.find(p => p.id === item.product.id);
         if (prod && prod.stock < item.quantity) {
@@ -37,7 +41,7 @@ export class OrderController {
       const orderItems: OrderItem[] = cartCalc.items.map(it => ({
         productId: it.product.id,
         productName: it.product.name,
-        categoryName: it.product.categoryId,
+        categoryName: catMap.get(it.product.categoryId) || 'Supermercado D2',
         unit: it.product.unit,
         quantity: it.quantity,
         unitPrice: it.unitPrice,
