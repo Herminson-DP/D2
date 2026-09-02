@@ -147,12 +147,19 @@ export class AuthController {
     } catch (err: any) {
       console.warn('Google sign-in error:', err);
       const isUnauthorized = err.code === 'auth/unauthorized-domain' || (err.message && err.message.includes('unauthorized-domain'));
+      const isConfigNotFound = err.code === 'auth/configuration-not-found' || (err.message && err.message.includes('configuration-not-found'));
+      
+      let errorMsg = err.message || 'Error en autenticación con Google';
+      if (isUnauthorized) {
+        errorMsg = 'El dominio de esta vista previa no está en la lista de dominios autorizados de Firebase Console (Authentication > Configuración > Dominios autorizados).';
+      } else if (isConfigNotFound) {
+        errorMsg = 'El proveedor de inicio de sesión de Google aún no está habilitado en tu Firebase Console. Debes ir a Authentication > Sign-in method y habilitar "Google".';
+      }
+
       return { 
         success: false, 
-        isUnauthorizedDomain: isUnauthorized,
-        error: isUnauthorized 
-          ? 'El dominio de esta vista previa no está en la lista de dominios autorizados de Firebase Console (Authentication > Configuración > Dominios autorizados).' 
-          : (err.message || 'Error en autenticación con Google') 
+        isUnauthorizedDomain: isUnauthorized || isConfigNotFound,
+        error: errorMsg 
       };
     }
   }

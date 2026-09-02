@@ -1,12 +1,12 @@
 {
-  "projectId": "magnetic-momentum-rdtd0",
-  "appId": "1:273041018530:web:d6012b3412a0b0898051fb",
-  "apiKey": "AIzaSyCnHdAw0A1IARbHU28-f3FW0ClkIH6ycGg",
-  "authDomain": "magnetic-momentum-rdtd0.firebaseapp.com",
-  "firestoreDatabaseId": "ai-studio-3667059c-00f2-411a-96fd-00deac04f5b9",
-  "storageBucket": "magnetic-momentum-rdtd0.firebasestorage.app",
-  "messagingSenderId": "273041018530",
-  "measurementId": "",
-  "oAuthClientId": "273041018530-akhlj85g6jqfbhkdjep8s5qjsmhhi70a.apps.googleusercontent.com",
+  "projectId": "d2-supermercado",
+  "appId": "1:311286925926:web:93376cce532b9e3c897ba7",
+  "apiKey": "AIzaSyD9YrNawtgrZ7EvYtFLrEqoIZe7w5t-frM",
+  "authDomain": "d2-supermercado.firebaseapp.com",
+  "firestoreDatabaseId": "(default)",
+  "storageBucket": "d2-supermercado.firebasestorage.app",
+  "messagingSenderId": "311286925926",
+  "measurementId": "G-1MDY2D3R1R",
+  "oAuthClientId": "",
   "recaptchaSiteKey": ""
 }
