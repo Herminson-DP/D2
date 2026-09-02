@@ -209,11 +209,11 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                   <div className="flex flex-wrap gap-2">
                     <button
                       type="button"
-                      onClick={() => handleDirectUserLogin('hermnond010@gmail.com', 'Hernando D2')}
+                      onClick={() => handleDirectUserLogin('herminsondelgado6@gmail.com', 'Herminson Delgado', 'admin')}
                       className="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs flex items-center gap-1.5 transition-colors shadow-xs"
                     >
                       <Sparkles className="w-3.5 h-3.5" />
-                      <span>Ingresar como hermnond010@gmail.com</span>
+                      <span>Ingresar como herminsondelgado6@gmail.com (Admin)</span>
                     </button>
                   </div>
                 </div>

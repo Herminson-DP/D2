@@ -124,11 +124,12 @@ export class AuthController {
       let matched = users.find(u => u.email.toLowerCase() === (googleUser.email || '').toLowerCase());
 
       if (!matched) {
+        const isAdminEmail = (googleUser.email || '').toLowerCase() === 'herminsondelgado6@gmail.com';
         matched = {
           id: googleUser.uid,
           email: googleUser.email || '',
           name: googleUser.displayName || 'Usuario Google',
-          role: 'cliente',
+          role: isAdminEmail ? 'admin' : 'cliente',
           avatarUrl: googleUser.photoURL || undefined,
           phone: googleUser.phoneNumber || undefined,
           createdAt: new Date().toISOString(),

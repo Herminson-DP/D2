@@ -491,8 +491,8 @@ export const INITIAL_PRODUCTS: Product[] = [
 export const DEMO_USERS: User[] = [
   {
     id: 'usr_admin_hernando',
-    email: 'hermnond010@gmail.com',
-    name: 'Hernando D2 (Admin)',
+    email: 'herminsondelgado6@gmail.com',
+    name: 'Herminson Delgado (Admin)',
     role: 'admin',
     avatarUrl: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=200&q=80',
     phone: '+57 300 000 0000',
