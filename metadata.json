@@ -1,0 +1,6 @@
+{
+  "name": "D2 Supermercado",
+  "description": "Tu tienda, tu confianza. Supermercado virtual con catálogo de productos, compras, cálculo automático de impuestos y descuentos, recibos e historial, y panel administrativo completo.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
